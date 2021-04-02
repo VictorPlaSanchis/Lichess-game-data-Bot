@@ -116,9 +116,8 @@ def getData(eloMin, eloMax, tipus, numFiles):
         completeForm(driver, eloMin, eloMax, tipus)
 
         # scroll down
-        for i in range(0,3):
+        for i in range(0,100):
             driver.execute_script("window.scrollTo(0, 9999)")
-            time.sleep(2)
             print('scroll ' + str(i))
 
         # get different data

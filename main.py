@@ -18,13 +18,15 @@ def main():
     eloMax = str(input())
     print('Digues tipus partida: [B:Bullet, R:Rapid, C:Classic]')
     tipus = str(input())
+    print('Numero de dades maximes a recollir: [0 : +inf]')
+    numDades = int(input())
 
     header = ['data', 'nom blanc', 'nom negre', 'elo blanc','elo negre','obertura','resultat']
 
     dades = []
     dades.append(header)
 
-    dataLichess = DataCollector.getData(eloMin, eloMax, tipus, 10)
+    dataLichess = DataCollector.getData(eloMin, eloMax, tipus, numDades)
     
     if dataLichess == -1:
         return -1
