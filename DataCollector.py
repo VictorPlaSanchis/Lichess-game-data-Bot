@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 import time
+import os
 
 def completeForm(driver, eloMin, eloMax, tipus):
 
@@ -33,9 +34,6 @@ def completeForm(driver, eloMin, eloMax, tipus):
 
     return
 
-def getDataGame(driver, XPath, attributeName):
-    return str(driver.find_element_by_xpath(XPath).get_attribute(attributeName))
-
 def getPlayerWhiteName(driver, XPath, attributeName):
     return str(driver.find_element_by_xpath(XPath).get_attribute(attributeName))
 
@@ -66,7 +64,6 @@ def getFileData(driver, fileNum):
     gameXPath = '//*[@id="results"]/div[2]/article[' + str(fileNum) + ']/div[2]'
 
     data = []
-    data.append(getDataGame(driver, gameXPath + '/div[1]/div/time', 'title'))
     data.append(getPlayerWhiteName(driver, gameXPath + '/div[2]/div[1]/a', 'href'))
     data.append(getPlayerWhiteName(driver, gameXPath + '/div[2]/div[3]/a', 'href'))
     data.append(getWhiteElo(driver, gameXPath + '/div[2]/div[1]'))
@@ -76,18 +73,21 @@ def getFileData(driver, fileNum):
 
     # neteja de dades
 
-    data[1] = data[1].replace('https://lichess.org/@/','')  # nom white
-    data[2] = data[2].replace('https://lichess.org/@/','')  # nom black
+    data[0] = data[0].replace('https://lichess.org/@/','')  # nom white
+    data[1] = data[1].replace('https://lichess.org/@/','')  # nom black
 
+    data[2] = data[2].replace(data[0]+'\n','')
     data[3] = data[3].replace(data[1]+'\n','')
-    data[4] = data[4].replace(data[2]+'\n','')
-    data[3] = data[3][0:len(data[3])-3]
-    data[4] = data[4][0:len(data[4])-3]
-    print(data)
+    data[2] = data[2][0:4]
+    data[3] = data[3][0:4]
+
+    os.system('cls')
+    print('# ' + str(fileNum))
+    print(data[1:len(data)])
 
     return data
 
-def getData(eloMin, eloMax, tipus, numFiles):
+def getData(eloMin, eloMax, tipus):
 
     data = []
 
@@ -109,20 +109,21 @@ def getData(eloMin, eloMax, tipus, numFiles):
         driver.find_element_by_xpath(passwrodXPath).send_keys('31415920865255')
         driver.find_element_by_xpath(logInButtonXPath).click()
 
-        time.sleep(4)
+        time.sleep(2)
 
         # lichess form
 
         completeForm(driver, eloMin, eloMax, tipus)
 
         # scroll down
-        for i in range(0,100):
-            driver.execute_script("window.scrollTo(0, 9999)")
-            print('scroll ' + str(i))
+        for i in range(0,20):
+            print('Scroll '+str(i))
+            driver.execute_script('window.scrollTo(0, 99999999);')
+            time.sleep(2)
 
         # get different data
         
-        for i in range(0,numFiles):
+        for i in range(1,1000):
             data.append(getFileData(driver, i+1))
 
     except:
