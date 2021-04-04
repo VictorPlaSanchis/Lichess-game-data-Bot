@@ -17,6 +17,12 @@
 #                                                                              #
 ################################################################################
 
+# next one: 00_05_04_21_R_1400_1900
+# next:     00_05_04_21_C_1400_1900
+# next:     00_05_04_21_B_0600_1400
+# next:     00_05_04_21_R_0600_1400
+# next:     00_05_04_21_C_0600_1400
+# next:     01_...
 
 import DataJoinner
 import DataController
@@ -26,59 +32,60 @@ import sys
 def program(exitCode = 0):
     
     print("program ended with exit code "+str(exitCode))
-
-    while(input()):
-        exit()
+    answer = input()
 
 def main():
 
-    nomArxiu = None
-    eloMin = None
-    eloMax = None
-    tipus = None
+    try:
 
-    if len(sys.argv) > 1:
+        nomArxiu = None
+        eloMin = None
+        eloMax = None
+        tipus = None
 
-        #XX_DD_MM_YY_T_ELOm_ELOM
-        # shorter way via value argument
+        if len(sys.argv) > 1:
 
-        nomArxiu = str(sys.argv[1])
-        eloMin = str(sys.argv[1][14:18])
-        eloMax = str(sys.argv[1][19:])
-        tipus = str(sys.argv[1][12])
+            #XX_DD_MM_YY_T_ELOm_ELOM
+            # shorter way via value argument
 
-        print(nomArxiu, eloMin, eloMax, tipus)
+            nomArxiu = str(sys.argv[1])
+            eloMin = str(sys.argv[1][14:18])
+            eloMax = str(sys.argv[1][19:])
+            tipus = str(sys.argv[1][12])
 
-    else:
+            print(nomArxiu, eloMin, eloMax, tipus)
 
-        print('Digues el nom de larxiu:')
-        nomArxiu = str(input())
-        print('Digues elo min:')
-        eloMin = int(input())
-        print('Digues elo max:')
-        eloMax = str(input())
-        print('Digues tipus partida: [B:Bullet, R:Rapid, C:Classic]')
-        tipus = str(input())
+        else:
 
-    header = ['nom blanc', 'nom negre', 'elo blanc','elo negre','obertura','resultat']
+            print('Digues el nom de larxiu:')
+            nomArxiu = str(input())
+            print('Digues elo min:')
+            eloMin = int(input())
+            print('Digues elo max:')
+            eloMax = str(input())
+            print('Digues tipus partida: [B:Bullet, R:Rapid, C:Classic]')
+            tipus = str(input())
 
-    dades = []
-    dades.append(header)
+        header = ['nom blanc', 'nom negre', 'elo blanc','elo negre','obertura','resultat']
 
-    dataLichess = DataCollector.getData(eloMin, eloMax, tipus)
+        dades = []
+        dades.append(header)
+
+        dataLichess = DataCollector.getData(eloMin, eloMax, tipus)
+        
+        if dataLichess == -1:
+            return -1
+
+        for elem in dataLichess:
+            dades.append(elem)
+
+        DataController.createFile(nomArxiu, dades)
+
+        return 0
     
-    if dataLichess == -1:
+    except:
+
         return -1
 
-    for elem in dataLichess:
-        dades.append(elem)
-
-    DataController.createFile(nomArxiu, dades)
-
-    DataController.createFile('JoinedData',DataJoinner.getContent(['name1','name2']))
-
-    return 0
-
 if __name__ == "__main__":
-    
     program(main())
