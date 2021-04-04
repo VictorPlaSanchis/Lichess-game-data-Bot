@@ -78,8 +78,8 @@ def getFileData(driver, fileNum):
 
     # actual ranks on chess GM IM FM SM NM EM/CM WGM WIM WFM WSM WNM WEM/WCM
 
-    data[2] = data[2].replace('\n','').replace('F','').replace('W','').replace('G','').replace('M','').replace('C','').replace('N','').replace('I','').replace('S','').replace('E','').replace('C','').replace(' ','')
-    data[3] = data[3].replace('\n','').replace('F','').replace('W','').replace('G','').replace('M','').replace('C','').replace('N','').replace('I','').replace('S','').replace('E','').replace('C','').replace(' ','')
+    data[2] = data[2].replace(str(data[0])+'\n','').replace('F','').replace('W','').replace('G','').replace('M','').replace('C','').replace('N','').replace('I','').replace('S','').replace('E','').replace('C','').replace(' ','').replace('BOT','')
+    data[3] = data[3].replace(str(data[1])+'\n','').replace('F','').replace('W','').replace('G','').replace('M','').replace('C','').replace('N','').replace('I','').replace('S','').replace('E','').replace('C','').replace(' ','').replace('BOT','')
 
     data[2] = data[2][0:4]
     data[3] = data[3][0:4]
@@ -122,14 +122,14 @@ def getData(eloMin, eloMax, tipus):
         completeForm(driver, eloMin, eloMax, tipus)
 
         # scroll down
-        for i in range(0,20):
+        for i in range(0,40):
             print('Scroll '+str(i))
-            driver.execute_script('window.scrollTo(0, 99999999);')
-            time.sleep(2)
+            driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+            time.sleep(1)
 
         # get different data
         
-        for i in range(1,1000):
+        for i in range(1,228):
             data.append(getFileData(driver, i+1))
 
     except:
