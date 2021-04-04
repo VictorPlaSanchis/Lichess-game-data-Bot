@@ -76,10 +76,16 @@ def getFileData(driver, fileNum):
     data[0] = data[0].replace('https://lichess.org/@/','')  # nom white
     data[1] = data[1].replace('https://lichess.org/@/','')  # nom black
 
-    data[2] = data[2].replace(data[0]+'\n','')
-    data[3] = data[3].replace(data[1]+'\n','')
+    # actual ranks on chess GM IM FM SM NM EM/CM WGM WIM WFM WSM WNM WEM/WCM
+
+    data[2] = data[2].replace('\n','').replace('F','').replace('W','').replace('G','').replace('M','').replace('C','').replace('N','').replace('I','').replace('S','').replace('E','').replace('C','').replace(' ','')
+    data[3] = data[3].replace('\n','').replace('F','').replace('W','').replace('G','').replace('M','').replace('C','').replace('N','').replace('I','').replace('S','').replace('E','').replace('C','').replace(' ','')
+
     data[2] = data[2][0:4]
     data[3] = data[3][0:4]
+
+    data[4] = data[4]
+    data[5] = data[5]
 
     os.system('cls')
     print('# ' + str(fileNum))
